@@ -1,32 +1,21 @@
 const express = require("express");
-const client = require('./connections.js')
+const client = require('./connections.js');
+const userRoutes = require('./users/routers');
 const cors = require("cors");
 
 const app = express();
+const port = 3001;
 
 app.use(express.json());
 
-client.connect();
+app.get('/', (req, res) => {
+  res.send('Home screen')
+})
 
-app.get("/users", (req, res, next) => {
-  try {
-    client.query("SELECT * FROM users", (err, result) => {
-      if(!err) {
-        res.send(result.rows)
-      }
-    })
-  } catch (error) {
-    res.status(error.status || 500).send({
-      error: {
-        status: error.status || 500,
-        message: error.message || "Internal Server Error",
-      },
-    });
-  }
-  client.end;
-});
+app.use('/api/v1/users', userRoutes);
 
 
-app.listen(3001, () => {
+
+app.listen(port, () => {
   console.log("app is running");
 });
