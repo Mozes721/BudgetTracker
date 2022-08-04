@@ -1,6 +1,6 @@
 const pool = require('../connections');
 const queries = require('./queries');
-
+const bcrypt = require("bcrypt");
 pool.connect();
 
 const getUsers = (req, res) => { 
@@ -48,9 +48,13 @@ const addUser = (req, res) => {
           res.send("Email already exists.;")
         }
     //add user to db
-    pool.query(queries.addUser, [fullname, email, password], (error, results) => {
-      if (error) throw error;
-      res.status(201).send("User Added Succesfully!")
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, (err, hash) => {
+        pool.query(queries.addUser, [fullname, email, hash], (error, results) => {
+          if (error) throw error;
+          res.status(201).send("User Added Succesfully!")
+        })
+      })
     })
   });
 }
