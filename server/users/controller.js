@@ -3,6 +3,7 @@ const queries = require('./queries');
 const bcrypt = require("bcrypt");
 pool.connect();
 
+
 const getUsers = (req, res) => { 
   try {
     pool.query(queries.getUsers, (error, result) => {
@@ -40,7 +41,7 @@ const getUsersById = (req, res) => {
     pool.end;
   }
 
-const addUser = (req, res) => {
+  const addUser = (req, res) => {
     const { fullname, email, password } = req.body;
     //check if email exists
     pool.query(queries.checkEmailExists, [email], (error, results) => {
@@ -59,8 +60,25 @@ const addUser = (req, res) => {
   });
 }
 
+const loginUser = (req, res) => {
+  const { fullname, email, password } = req.body;
+   pool.query(queries.checkPassword, [email], (error, results) => {
+      if (results.rows.length) {
+        var user_pw = results.rows[0].password;
+        if(bcrypt.compareSync(password, user_pw)) {
+          res.status(201).send(`User Logged in  Succesfully with the email of ${email}`)
+        } else {
+          res.status(401).send("Incorrect email or password provided!")
+        }
+
+      }
+  });
+}
+
+
 module.exports = {
     getUsers,
     getUsersById,
     addUser,
+    loginUser,
 };
