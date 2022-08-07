@@ -6,9 +6,15 @@ const cors = require("cors");
 const app = express();
 const port = 3001;
 
+app.use(cors());
+
 app.use(express.json());
 
-app.get('/', (req, res) => {
+
+app.get('/', (req, res, next) => {
+  // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.header("Access-Control-Allow-Credentials", true);
+  next();
   res.send('Home screen')
 })
 

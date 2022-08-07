@@ -47,7 +47,7 @@ const getUsersById = (req, res) => {
     pool.query(queries.checkEmailExists, [email], (error, results) => {
         if (results.rows.length) {
           res.send("Email already exists.;")
-        }
+        }else {
     //add user to db
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hash) => {
@@ -57,6 +57,7 @@ const getUsersById = (req, res) => {
         })
       })
     })
+  }
   });
 }
 
