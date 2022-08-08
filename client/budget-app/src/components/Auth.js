@@ -1,7 +1,6 @@
-
-
 import React, { useRef, useState, useEffect } from "react"
-import axios from 'axios';
+import axios from "axios";
+
 
 
 // eslint-disable-next-line
@@ -22,46 +21,63 @@ export default function (props) {
     setErrMsg('')
   }, [user, email, pwd])
 
+
+
   const handleRegister = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3001/api/v1/users/',
-      JSON.stringify({user, email, pwd}),
-      {
-        headers: {'Content-Type': 'application/json'},
-        withCredentials: true
-      }
-      );
-      setUser('');
-      setEmail('');
-      setPwd('');
-    } catch {
-      setErrMsg('No Server Response');
-    }
-  };
+    console.log("handle register");
+    const registerUser = JSON.stringify({
+      "fullname": user,
+      "email": email,
+      "password": pwd
+    });
+    console.log(user)
+    console.log(registerUser);
+    var config = {
+      method: 'post',
+      url: 'http://localhost:3001/api/v1/users/',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : registerUser
+    };
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    setUser('');
+    setEmail('');
+    setPwd('');
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("hello")
-    const response = await axios.get('http://localhost:3001/api/v1/users')
-    console.log(response)
-    // try {
-    //   const response = await axios.post('http://localhost:3001/api/v1/users/login/',
-      
-    //   JSON.stringify({user, pwd}),
-    //   {
-    //     headers: {'Content-Type': 'application/json'},
-    //     withCredentials: true
-    //   }
-    //   );
-    //   console.log("You have logged in");
-    //   setUser('');
-    //   setPwd('');
-    // } catch {
-    //   setErrMsg('No Server Response');
-    // }
-  };
-
+    console.log("handle login");
+    const loginUser = JSON.stringify({
+      "email": email,
+      "password": pwd
+    });
+      const config = {
+        method: 'post',
+        url: 'http://localhost:3001/api/v1/users/login',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: loginUser
+      };
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      setEmail('');
+      setPwd('');
+    }
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin")
   }
@@ -69,7 +85,7 @@ export default function (props) {
   if (authMode === "signin") {
     return (
       <div className="Auth-form-container">
-        <form className="Auth-form" onClick={handleLogin}>
+        <form className="Auth-form" onSubmit={handleLogin}>
           <div className="Auth-form-content">
             <h3 className="Auth-form-title">Sign In</h3>
             <div className="text-center">
@@ -115,9 +131,9 @@ export default function (props) {
 
   return (
     <div className="Auth-form-container">
-      <form className="Auth-form"  onClick={handleRegister}>
+      <form className="Auth-form"  onSubmit={handleRegister}>
         <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign In</h3>
+          <h3 className="Auth-form-title">Register</h3>
           <div className="text-center">
             Already registered?{" "}
             <span className="link-primary" onClick={changeAuthMode}>
@@ -172,4 +188,5 @@ export default function (props) {
     </div>
   )
   }
+
 
