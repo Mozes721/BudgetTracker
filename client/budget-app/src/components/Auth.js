@@ -1,4 +1,6 @@
-import React, { useRef, useState, useEffect } from "react"
+import React, { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Dashboard from "./Dashboard";
 import axios from "axios";
 
 
@@ -16,6 +18,10 @@ export default function (props) {
   const [pwd, setPwd] = useState('');
   const [err, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
+  const [authenticated, setauthenticated] = useState(
+    localStorage.getItem(localStorage.getItem("authenticated") || false)
+  );
 
   useEffect(() => {
     setErrMsg('')
@@ -44,6 +50,9 @@ export default function (props) {
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
+      setauthenticated(true)
+      localStorage.setItem("authenticated", true);
+      navigate("/dashboard");
     })
     .catch(function (error) {
       console.log(error);
@@ -71,6 +80,9 @@ export default function (props) {
       axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
+        setauthenticated(true)
+        localStorage.setItem("authenticated", true);
+        navigate("/dashboard");
       })
       .catch(function (error) {
         console.log(error);
