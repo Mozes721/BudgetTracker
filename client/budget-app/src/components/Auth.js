@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Dashboard from "./Dashboard";
+import { login } from "../features/userSlice";
 import axios from "axios";
-
+import { useSelector, useDispatch } from 'react-redux'
 
 
 // eslint-disable-next-line
@@ -19,6 +19,7 @@ export default function (props) {
   const [err, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [authenticated, setauthenticated] = useState(
     localStorage.getItem(localStorage.getItem("authenticated") || false)
   );
@@ -52,6 +53,12 @@ export default function (props) {
       console.log(JSON.stringify(response.data));
       setauthenticated(true)
       localStorage.setItem("authenticated", true);
+
+      dispatch(login({
+        email:email,
+      }));
+
+
       navigate("/dashboard");
     })
     .catch(function (error) {
@@ -82,6 +89,11 @@ export default function (props) {
         console.log(JSON.stringify(response.data));
         setauthenticated(true)
         localStorage.setItem("authenticated", true);
+
+        dispatch(login({
+          email:email,
+        }));
+
         navigate("/dashboard");
       })
       .catch(function (error) {
