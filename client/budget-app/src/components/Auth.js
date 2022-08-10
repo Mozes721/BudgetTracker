@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../features/userSlice";
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 
 // eslint-disable-next-line
@@ -20,9 +20,7 @@ export default function (props) {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch()
-  const [authenticated, setauthenticated] = useState(
-    localStorage.getItem(localStorage.getItem("authenticated") || false)
-  );
+ 
 
   useEffect(() => {
     setErrMsg('')
@@ -51,11 +49,10 @@ export default function (props) {
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
-      setauthenticated(true)
-      localStorage.setItem("authenticated", true);
 
       dispatch(login({
         email:email,
+        loggedIn:true,
       }));
 
 
@@ -87,11 +84,10 @@ export default function (props) {
       axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
-        setauthenticated(true)
-        localStorage.setItem("authenticated", true);
 
         dispatch(login({
           email:email,
+          loggedIn:true,
         }));
 
         navigate("/dashboard");

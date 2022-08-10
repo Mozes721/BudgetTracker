@@ -3,21 +3,17 @@ import Table from 'react-bootstrap/Table';
 import { BrowserRouter, Navigate } from "react-router-dom"
 import React, { Component} from "react"
 import { useEffect, useState } from "react";
+import { useSelector } from 'react-redux'
 
 const Dashboard = () => {
-    const [authenticated, setauthenticated] = useState(null);
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("authenticated");
-    if (loggedInUser) {
-      setauthenticated(loggedInUser);
-    }
-  }, []);
+  const authenticated = useSelector(state => state.user.value.loggedIn)
+  console.log(authenticated)
   if (!authenticated) {
     return <Navigate replace to="/" />;
     } else {
   return (
-    <div>
-        <Navbar />
+    <div >
+      <Navbar className="d-grid gap-5"/>
             <Table striped bordered hover>
             <thead>
                 <tr>
@@ -48,8 +44,8 @@ const Dashboard = () => {
             </tbody>
             </Table>
     </div>
-  );
-}
+    );
+  }
 }
 
 export default Dashboard;

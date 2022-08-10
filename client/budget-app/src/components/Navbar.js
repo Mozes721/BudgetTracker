@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import React from 'react';
 
-const ColorSchemesExample = () => {
+const NavBar = () => {
   return (
     <>
       <Navbar bg="dark" variant="dark">
@@ -23,4 +23,4 @@ const ColorSchemesExample = () => {
   );
 }
 
-export default ColorSchemesExample;
+export default NavBar;
