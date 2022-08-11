@@ -1,10 +1,13 @@
 const sequelize = require("./utils/connections");
 
-const Users = require("./model/users");
+const User = require("./model/users");
 const Budget = require("./model/budget");
 
+User.hasMany(Budget);
+Budget.hasMany(User);
+
 sequelize
-    .sync()
+    .sync({force: true})
     .then((result) => {
         console.log(result);
     })
@@ -12,4 +15,3 @@ sequelize
         console.log(err);
     });
 
-    
