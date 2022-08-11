@@ -1,6 +1,7 @@
 const express = require("express");
 const client = require('./connections.js');
 const userRoutes = require('./users/routers');
+const {errorHandler} = require('./midelware/errorMiddleware');
 const cors = require("cors");
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(cors({
 const port = 3001;
 
 app.use(express.json());
+app.use(errorHandler);
 
 
 app.get('/', (req, res, next) => {
