@@ -5,7 +5,6 @@ const User = db.define('users', {
     id: {
         type: Sequlize.INTEGER,
         autoIncrement: true,
-        allowNull: false,
         primaryKey:true,
 
     },
@@ -13,10 +12,22 @@ const User = db.define('users', {
         type: Sequlize.STRING,
         allowNull: false,
     },
+    email: {
+        type: Sequlize.STRING,
+        allowNull: false,
+    },
     password: {
         type: Sequlize.STRING,
         allowNull: false,
     },
+      createdAt: {
+      type: Sequlize.DATE,
+      allowNull: true
+    },
+    updatedAt: {
+      type: Sequlize.DATE,
+      allowNull: true
+    }
 })
 
 module.exports = User;

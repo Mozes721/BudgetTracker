@@ -1,5 +1,4 @@
 const express = require("express");
-const client = require('./connections.js');
 const userRoutes = require('./users/routers');
 const {errorHandler} = require('./midelware/errorMiddleware');
 const cors = require("cors");
@@ -11,7 +10,7 @@ app.use(cors({
   methods: ["GET", "POST"],
 }))
 
-const port = 3001;
+const port = 3000;
 
 app.use(express.json());
 app.use(errorHandler);

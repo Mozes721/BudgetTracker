@@ -1,12 +1,11 @@
-const Sequlize= require('sequelize');
-const DataTypes = require('sequelize');
+const Sequlize= require('sequelize')
+const DataTypes = require('sequelize')
 const db = require('../utils/connections')
 
 const Budget = db.define('budget', {
     id: {
         type: Sequlize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        autoIncrement: true, 
         primaryKey:true,
     },
 
@@ -30,6 +29,14 @@ const Budget = db.define('budget', {
         type: DataTypes.DATE,
         allowNull: false,
       },
+    createdAt: {
+      type: Sequlize.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: Sequlize.DATE,
+      allowNull: false,
+    }
 })
 
 module.exports = Budget;
