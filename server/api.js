@@ -1,6 +1,6 @@
 const express = require("express");
+const client = require("./utils/connections");
 const userRoutes = require('./users/routers');
-const {errorHandler} = require('./midelware/errorMiddleware');
 const cors = require("cors");
 
 const app = express();
@@ -10,10 +10,9 @@ app.use(cors({
   methods: ["GET", "POST"],
 }))
 
-const port = 3000;
+const port = 3001;
 
 app.use(express.json());
-app.use(errorHandler);
 
 
 app.get('/', (req, res, next) => {

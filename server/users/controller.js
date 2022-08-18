@@ -1,15 +1,15 @@
 const pool = require('../utils/connections');
 const queries = require('./queries');
 const bcrypt = require("bcrypt");
-const Users = require('../model/users');
-// pool.connect();
+pool.connect();
 
 
 const getUsers = (req, res) => { 
   try {
-    Users.findAll()
-    .then(data => {
-      res.send(data);
+    pool.query(queries.getUsers, (error, result) => {
+      if(!error) {
+        res.status(200).json(result.rows);
+      }
     })
   } catch (error) {
     res.status(error.status || 500).send({
@@ -43,7 +43,6 @@ const getUsersById = (req, res) => {
 
   const addUser = (req, res) => {
     const { fullname, email, password } = req.body;
-    console.log(fullname, email, password)
     //check if email exists
     pool.query(queries.checkEmailExists, [email], (error, results) => {
         if (results.rows.length) {
