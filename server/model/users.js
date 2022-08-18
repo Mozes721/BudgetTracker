@@ -1,22 +1,33 @@
-const Sequlize = require('sequelize');
-const db = require('../utils/connections')
+// const Sequlize = require('sequelize');
+// const db = require('../utils/connections')
 
-const User = db.define('users', {
-    id: {
-        type: Sequlize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey:true,
+// const Users = db.define('users', {
+//     id: {
+//         type: Sequlize.INTEGER,
+//         autoIncrement: true,
+//         primaryKey:true,
 
-    },
-    fullname: {
-        type: Sequlize.STRING,
-        allowNull: false,
-    },
-    password: {
-        type: Sequlize.STRING,
-        allowNull: false,
-    },
-})
+//     },
+//     fullname: {
+//         type: Sequlize.STRING,
+//         allowNull: false,
+//     },
+//     email: {
+//         type: Sequlize.STRING,
+//         allowNull: false,
+//     },
+//     password: {
+//         type: Sequlize.STRING,
+//         allowNull: false,
+//     },
+//       createdAt: {
+//       type: Sequlize.DATE,
+//       allowNull: true
+//     },
+//     updatedAt: {
+//       type: Sequlize.DATE,
+//       allowNull: true
+//     }
+// })
 
-module.exports = User;
+// module.exports = Users;

@@ -1,10 +1,13 @@
 const sequelize = require("./utils/connections");
 
-const User = require("./model/users");
+const Users = require("./model/users");
 const Budget = require("./model/budget");
+const SharedBudget = require("./model/associations");
 
-User.hasMany(Budget);
-Budget.hasMany(User);
+
+Users.hasMany(Budget);
+Users.belongsToMany(Budget, { through: SharedBudget });
+Budget.belongsToMany(Users, { through: SharedBudget });
 
 sequelize
     .sync({force: true})

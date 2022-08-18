@@ -1,5 +1,10 @@
-const Sequelize = require("sequelize");
-// Example PostgreSQL connect to DB
-const sequelize = new Sequelize('postgres://[user]:[pass]@postgres:5432/db');
-module.exports = sequelize;
+const {Client} = require('pg')
 
+const client = new Client({
+    host: "localhost",
+    user: "postgres",
+    port: 5432,
+    password: "root",
+    database: "budget"
+})
+module.exports = client

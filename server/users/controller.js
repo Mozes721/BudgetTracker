@@ -1,4 +1,4 @@
-const pool = require('../connections');
+const pool = require('../utils/connections');
 const queries = require('./queries');
 const bcrypt = require("bcrypt");
 pool.connect();
