@@ -22,7 +22,7 @@ const getUsers = (req, res) => {
   pool.end;
 }
 
-const getUsersById = (req, res) => { 
+const getUserById = (req, res) => { 
     try {
       const id = parseInt(req.params.id);
       pool.query(queries.getUserById, [id], (error, result) => {
@@ -49,15 +49,26 @@ const getUsersById = (req, res) => {
           res.send("Email already exists.;")
         }else {
     //add user to db
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(password, salt, (err, hash) => {
-        pool.query(queries.addUser, [fullname, email, hash], (error, results) => {
-          if (error) throw error;
-          res.status(201).send("User Added Succesfully!")
-        })
-      })
-    })
-  }
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(password, salt, (err, hash) => {
+            pool.query(queries.addUser, [fullname, email, hash], (error, results) => {
+              if (error) throw error;
+              res.status(201).send("User Added Succesfully!")
+            })
+          })
+        });
+      }
+  });
+}
+
+const deleteUserById = (req, res) => {
+  const id = parseInt(req.params.id);
+  console.log(id);
+  pool.query(queries.deleteUser, [id], (error, results) => {
+    const noUserFound = !results.rows.length;
+    if (noUserFound) {
+        res.send("User does not exists in db");
+      }
   });
 }
 
@@ -71,7 +82,6 @@ const loginUser = (req, res) => {
         } else {
           res.status(401).send("Incorrect email or password provided!")
         }
-
       }
   });
 }
@@ -79,7 +89,8 @@ const loginUser = (req, res) => {
 
 module.exports = {
     getUsers,
-    getUsersById,
+    getUserById,
     addUser,
+    deleteUserById,
     loginUser,
 };
