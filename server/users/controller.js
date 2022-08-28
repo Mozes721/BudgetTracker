@@ -58,8 +58,7 @@ const getUserById = (req, res) => {
           })
         });
       }
-  });
-}
+  });}
 
 const deleteUserById = (req, res) => {
   const id = parseInt(req.params.id);
@@ -86,6 +85,73 @@ const loginUser = (req, res) => {
   });
 }
 
+// const getUserBudget = (req, res) => {
+//   try {
+//       const id = parseInt(req.params.id);
+
+//       pool.query(queries.getBalance, [id], (error, result) => {
+//         if(!error) {
+//             res.status(200).json(result.rows);
+//         }
+//       })
+//     } catch (error) {
+//       res.status(error.status || 500).send({
+//         error: {
+//           status: error.status || 500,
+//           message: error.message || "Internal Server Error",
+//         },
+//       });
+//     }
+//     pool.end;
+// }
+
+const addExpenseOrIncome = (req, res) => {
+    const { title, expense, created_on, user_id } = req.body;
+    var value = req.body;
+    const id = parseInt(req.params.id);
+    //check if expense or income
+    try {
+      if (expense) {
+        // Get balance
+        pool.query(queries.getBalance, [id], (error, result) => {
+          if(!error) {
+            var balance = result.rows;
+            var subtractFromBalance = balance - value;
+            // check if can be subtracted
+              if(subtractFromBalance > 0) {
+                pool.query(queries.updateBalance, [subtractFromBalance, id]);
+                pool.end;
+                if(created_on) {
+                pool.query(queries.addExpenseOrIncome, [title, expense, created_on, id]);
+                } else {
+                  pool.query(queries.addExpenseOrIncome, [title, expense, id]);
+                }
+                pool.end;
+              }
+            }
+          })
+          pool.end;
+      } 
+      else {
+          res.send("You don't have enough money")
+           }
+          if(balance)
+          res.status(200).json(result.rows);
+          {
+
+          }
+        }
+        catch (error) {
+        res.status(error.status || 500).send({
+        error: {
+          status: error.status || 500,
+          message: error.message || "Internal Server Error",
+        },
+      });
+    }
+}
+ 
+
 
 module.exports = {
     getUsers,
@@ -93,4 +159,7 @@ module.exports = {
     addUser,
     deleteUserById,
     loginUser,
+    getUserBudget,
+    addExpenseOrIncome,
+
 };

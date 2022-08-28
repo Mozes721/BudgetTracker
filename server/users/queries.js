@@ -8,6 +8,11 @@ const checkEmailExists = "SELECT s FROM users s WHERE s.email = $1";
 const checkPassword = "SELECT password from users where email = $1";
 const addUser = "INSERT INTO users (fullname, email, password) VALUES ($1, $2, $3)";
 const deleteUser = "DELETE FROM users WHERE user_id = $1";
+
+const addExpenseOrIncome = "INSERT INTO budget(title, expense, value, user_id) VALUES ($1, $2, $3, $4)";
+const getBalance = "SELECT balance FROM budget WHERE user_id = $1";
+const updateBalance = "UPDATE budget SET budget = $1 WHERE user_id IN $2";
+
 module.exports = {
     queryUsers,
     queryBudget,
@@ -18,4 +23,9 @@ module.exports = {
     addUser,
     checkPassword,
     deleteUser,
+
+    addExpenseOrIncome,
+    getBalance,
+    updateBalance
+
 }
