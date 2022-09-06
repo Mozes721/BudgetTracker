@@ -10,6 +10,7 @@ client.query(tables.queryBudget, (err, res) => {
     console.log("Budget table created");
     console.log(err, res);
 })
+
 client.query(tables.queryRelationship, (err, res) => {
     console.log("Relationship table created");
     console.log(err, res);

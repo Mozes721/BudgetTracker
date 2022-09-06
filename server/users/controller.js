@@ -1,4 +1,5 @@
 const pool = require('../utils/connections');
+const queryFunc = require('../midelware/queryFunctions');
 const queries = require('./queries');
 const bcrypt = require("bcrypt");
 pool.connect();
@@ -85,60 +86,44 @@ const loginUser = (req, res) => {
   });
 }
 
-// const getUserBudget = (req, res) => {
-//   try {
-//       const id = parseInt(req.params.id);
-
-//       pool.query(queries.getBalance, [id], (error, result) => {
-//         if(!error) {
-//             res.status(200).json(result.rows);
-//         }
-//       })
-//     } catch (error) {
-//       res.status(error.status || 500).send({
-//         error: {
-//           status: error.status || 500,
-//           message: error.message || "Internal Server Error",
-//         },
-//       });
-//     }
-//     pool.end;
-// }
-
 const addExpenseOrIncome = (req, res) => {
-    const { title, expense, created_on, user_id } = req.body;
-    var value = req.body;
+    const { title, expense, value, created_on, user_id } = req.body;
     const id = parseInt(req.params.id);
+    console.log(id)
     //check if expense or income
     try {
-      if (expense) {
-        // Get balance
-        pool.query(queries.getBalance, [id], (error, result) => {
-          if(!error) {
-            var balance = result.rows;
-            var subtractFromBalance = balance - value;
-            // check if can be subtracted
-              if(subtractFromBalance > 0) {
-                pool.query(queries.updateBalance, [subtractFromBalance, id]);
-                pool.end;
-                if(created_on) {
-                pool.query(queries.addExpenseOrIncome, [title, expense, created_on, id]);
-                } else {
-                  pool.query(queries.addExpenseOrIncome, [title, expense, id]);
-                }
-                pool.end;
+          if (expense) {
+            // Get balance
+             console.log('expense')
+            var balance = queries.getBalance(id)
+            
+            console.log(balance);
+            const subtract = queryFunc.canSubtractFromBalance(id, balance);
+            if (subtract) {
+              let newBalance = value - balance;
+              console.log(newBalance)
+              queryFunc.updateBalance(id, newBalance);
+              if (created_on) {
+                queryFunc.addExpenseOrIncomeWithDate(title, expense, value, created_on, id);
+              } else {
+                queryFunc.addExpenseOrIncomeWithoutDate(title, expense, value, id);
               }
+            }else {
+              res.send("You don't have enough money")
             }
-          })
-          pool.end;
-      } 
-      else {
-          res.send("You don't have enough money")
-           }
-          if(balance)
-          res.status(200).json(result.rows);
-          {
-
+          } 
+          else {
+            console.log('income')
+            var balance = queryFunc.getBalance(id);
+            console.log(balance);
+            let newBalance = value + balance;
+            console.log(newBalance)
+            queryFunc.updateBalance(id, newBalance);
+            if (created_on) {
+                queryFunc.addExpenseOrIncomeWithDate(title, expense, value, created_on, id);
+              } else {
+                queryFunc.addExpenseOrIncomeWithoutDate(title, expense, value, id);
+              }
           }
         }
         catch (error) {
@@ -150,8 +135,26 @@ const addExpenseOrIncome = (req, res) => {
       });
     }
 }
- 
 
+const shareBudget = (req, res) => {
+  const {user_id, budget_id}  = req.body;
+  try {
+  pool.query(queries.shareBudget, [user_id, budget_id], (error, results) => {
+   if(!error) {
+      res.send("Budget shared")
+        res.status(200).json(result.rows);
+      }
+    })
+  } catch (error) {
+    res.status(error.status || 500).send({
+      error: {
+        status: error.status || 500,
+        message: error.message || "Internal Server Error",
+      },
+    });
+  }
+  pool.end;
+}
 
 module.exports = {
     getUsers,
@@ -159,7 +162,6 @@ module.exports = {
     addUser,
     deleteUserById,
     loginUser,
-    getUserBudget,
     addExpenseOrIncome,
-
+    shareBudget
 };
