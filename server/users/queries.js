@@ -9,8 +9,8 @@ const checkPassword = "SELECT password from users where email = $1";
 const addUser = "INSERT INTO users (fullname, email, password) VALUES ($1, $2, $3)";
 const deleteUser = "DELETE FROM users WHERE user_id = $1";
 
-const addExpenseOrIncome = "INSERT INTO budget(title, expense, value, user_id) VALUES ($1, $2, $3, $4)";
-const getBalance = "SELECT DISTINCT balance FROM buget WHERE user_id = $1";
+const addExpenseOrIncome = "INSERT INTO budget(balance, title, expense, value, user_id) VALUES ($1, $2, $3, $4, $5)";
+const getBalance = "SELECT DISTINCT balance FROM budget WHERE user_id = $1";
 const updateBalance = "UPDATE budget SET balance = $1 WHERE user_id = $2";
 
 const shareBudget = "INSERT INTO associations(user_id, budget_id) VALUES ($1, $2)"
@@ -19,7 +19,6 @@ module.exports = {
     queryUsers,
     queryBudget,
     queryRelationship,
-
     getUsers,
     getUserById,
     checkEmailExists,
@@ -28,8 +27,7 @@ module.exports = {
     deleteUser,
 
     addExpenseOrIncome,
-    getBalance,
     updateBalance,
-
-    shareBudget
+    shareBudget,
+    getBalance
 }

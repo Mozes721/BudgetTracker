@@ -44,6 +44,7 @@ const getUserById = (req, res) => {
 
   const addUser = (req, res) => {
     const { fullname, email, password } = req.body;
+    console.log(fullname, email, password)
     //check if email exists
     pool.query(queries.checkEmailExists, [email], (error, results) => {
         if (results.rows.length) {
@@ -86,24 +87,28 @@ const loginUser = (req, res) => {
   });
 }
 
-const addExpenseOrIncome = (req, res) => {
-    const { title, expense, value, created_on, user_id } = req.body;
+
+
+const addExpenseOrIncome =  (req, res) => {
+    const { title, expense, value, created_on } = req.body;
+    console.log(title,expense,value,created_on);
     const id = parseInt(req.params.id);
-    console.log(id)
+    const balance =  queryFunc.getBalance(id);
+
     //check if expense or income
     try {
           if (expense) {
             // Get balance
              console.log('expense')
-            var balance = queries.getBalance(id)
-            
-            console.log(balance);
-            const subtract = queryFunc.canSubtractFromBalance(id, balance);
+
+            console.log(value, balance)
+            let subtract = queryFunc.canSubtractFromBalance(balance, value);
+            console.log(subtract)
             if (subtract) {
               let newBalance = value - balance;
               console.log(newBalance)
               queryFunc.updateBalance(id, newBalance);
-              if (created_on) {
+              if (typeof created_on !== 'undefined') {
                 queryFunc.addExpenseOrIncomeWithDate(title, expense, value, created_on, id);
               } else {
                 queryFunc.addExpenseOrIncomeWithoutDate(title, expense, value, id);
@@ -113,8 +118,7 @@ const addExpenseOrIncome = (req, res) => {
             }
           } 
           else {
-            console.log('income')
-            var balance = queryFunc.getBalance(id);
+            console.log('income') 
             console.log(balance);
             let newBalance = value + balance;
             console.log(newBalance)

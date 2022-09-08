@@ -8,6 +8,7 @@ router.get('/:id',controller.getUserById);
 router.delete('/:id',controller.deleteUserById);
 router.post('/login', controller.loginUser);
 
+
 router.post('/expense/:id',controller.addExpenseOrIncome);
 router.post('/shared-expense', controller.shareBudget);
 
