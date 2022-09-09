@@ -87,58 +87,34 @@ const loginUser = (req, res) => {
   });
 }
 
-
-
 const addExpenseOrIncome =  (req, res) => {
-    const { title, expense, value, created_on } = req.body;
-    console.log(title,expense,value,created_on);
+    const { title, expense, value } = req.body;
     const id = parseInt(req.params.id);
-    const balance =  queryFunc.getBalance(id);
-
     //check if expense or income
-    try {
-          if (expense) {
+    queryFunc.getBalance(id).then(function(rows) {
+      if (expense) {
             // Get balance
-             console.log('expense')
-
-            console.log(value, balance)
-            let subtract = queryFunc.canSubtractFromBalance(balance, value);
-            console.log(subtract)
-            if (subtract) {
-              let newBalance = value - balance;
-              console.log(newBalance)
-              queryFunc.updateBalance(id, newBalance);
-              if (typeof created_on !== 'undefined') {
-                queryFunc.addExpenseOrIncomeWithDate(title, expense, value, created_on, id);
-              } else {
-                queryFunc.addExpenseOrIncomeWithoutDate(title, expense, value, id);
-              }
-            }else {
-              res.send("You don't have enough money")
-            }
-          } 
-          else {
-            console.log('income') 
-            console.log(balance);
-            let newBalance = value + balance;
-            console.log(newBalance)
-            queryFunc.updateBalance(id, newBalance);
-            if (created_on) {
-                queryFunc.addExpenseOrIncomeWithDate(title, expense, value, created_on, id);
-              } else {
-                queryFunc.addExpenseOrIncomeWithoutDate(title, expense, value, id);
-              }
+          const newBalance = rows - value
+          if(newBalance >= 0) {
+            res.send("You have enough money to make the transaction");
+            queryFunc.updateBalance(newBalance, id);
+            queryFunc.addExpenseOrIncome(newBalance, title, expense, value, id);
+            res.send("Expense has been added");
           }
-        }
-        catch (error) {
-        res.status(error.status || 500).send({
-        error: {
-          status: error.status || 500,
-          message: error.message || "Internal Server Error",
-        },
-      });
-    }
+          else {
+                  res.send("You don't have enough money");
+                }
+      }
+        else {
+            const newBalance = value + rows;
+            queryFunc.updateBalance(newBalance, id);
+            queryFunc.addExpenseOrIncome(newBalance, title, expense, value, id);
+            res.send("Income has been added");
+          }
+        
+    })
 }
+
 
 const shareBudget = (req, res) => {
   const {user_id, budget_id}  = req.body;

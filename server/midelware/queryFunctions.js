@@ -1,61 +1,30 @@
 const pool = require('../utils/connections');
 const queries = require('../users/queries');
 
-let getBalance = (id) => {
+function getBalance(id)
+{
+    return new Promise(function(resolve, reject) {
         pool.query(queries.getBalance, [id], (error, result) => {
-            if (!error) {
-                // res.status(200).json(result.rows[0].balance);
-                let balance = result.rows[0].balance;
-                console.log("hello from balance");
-                console.log(balance)
-                return balance;
-                
+            if (error) {
+                return reject(error)
             }
+                resolve(result.rows[0].balance);
             })
             pool.end;
-        }
 
-let canSubtractFromBalance = (balance, value) => {
-
-        let newBalance = balance - value
-        console.log(newBalance)
-        if (newBalance < 0) {
-
-             return false
-        } 
-        else 
-        {
-            return true
-    }
+    });
 }
-function subtractFromBalance(id, ammount) {
+function updateBalance(ammount, id) {
     pool.query(queries.updateBalance, [ammount, id], (error, result) => {
-                if(!error) {
-                    return result
-                }
-            })
-            pool.end;
-        }
-
-
-function updateBalance(id, ammount) {
-    pool.query(queries.updateBalance, [id, ammount], (error, result) => {
             if(!error) {
                 console.log(result);
             }
         })
     pool.end;
 }
-function addExpenseOrIncomeWithDate(title, expense, created_on, id) {
-    pool.query(queries.addExpenseOrIncome, [title, expense, created_on, id], (error, result) => {
-        if(!error) {
-            console.log(result);
-            }
-        })
-    pool.end;
-}
-function addExpenseOrIncomeWithoutDate(title, expense, created_on, id) {
-    pool.query(queries.addExpenseOrIncome, [title, expense, created_on, id], (error, result) => {
+
+function addExpenseOrIncome(balance, title, expense, value, id) {
+    pool.query(queries.addExpenseOrIncome, [balance, title, expense, value, id], (error, result) => {
         if(!error) {
             console.log(result);
             }
@@ -65,9 +34,6 @@ function addExpenseOrIncomeWithoutDate(title, expense, created_on, id) {
 
 module.exports = {
     getBalance,
-    canSubtractFromBalance,
-    subtractFromBalance,
     updateBalance,
-    addExpenseOrIncomeWithDate,
-    addExpenseOrIncomeWithoutDate,
+    addExpenseOrIncome,
 }
