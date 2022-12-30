@@ -9,13 +9,13 @@ app.use(cors({
   methods: ["GET", "POST"],
 }))
 
-const port = 3000;
+const port = 5000;
 
 app.use(express.json());
 
 app.get('/', (req, res, next) => {
   res.header("Access-Control-Allow-Origin", true);
-  // res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Credentials", true);
   // next();
   res.send('Home screen')
 })
