@@ -1,4 +1,4 @@
-import Navbar from './Navbar';
+import Navbar from  "../Navbar"
 import Table from 'react-bootstrap/Table';
 import { BrowserRouter, Navigate } from "react-router-dom"
 import React, { Component} from "react"
@@ -12,7 +12,7 @@ const Dashboard = () => {
     return <Navigate replace to="/" />;
     } else {
   return (
-    <div >
+    <div>
       <Navbar className="d-grid gap-5"/>
             <Table striped bordered hover>
             <thead>

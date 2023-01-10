@@ -3,24 +3,26 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import React from 'react';
 
-const NavBar = () => {
+
+export default function NavBar () {
   return (
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand href="#home">Navbar</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link href="/overview">Overview</Nav.Link>
+            <Nav.Link href="/expenses">Expenses</Nav.Link>
+            <Nav.Link href="/income">Income</Nav.Link>
+            <Nav.Link href="/shared">Shared</Nav.Link>
           </Nav>
           <Navbar.Text>
-            Signed in as: <a href="#login">Mark Otto</a>
+            Signed in as: Mark Otto
           </Navbar.Text>
+          <a href="/">Sign Out</a>
         </Container>
       </Navbar>
     </>
   );
 }
 
-export default NavBar;
