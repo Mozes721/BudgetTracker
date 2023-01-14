@@ -1,19 +1,27 @@
-import Navbar from  "../Navbar"
+import Navbar from '../Navbar';
 import Table from 'react-bootstrap/Table';
 import { BrowserRouter, Navigate } from "react-router-dom"
-import React, { Component} from "react"
+import React, { useRef } from "react"
 import { useEffect, useState } from "react";
 import { useSelector } from 'react-redux'
 
 const Dashboard = () => {
-  const authenticated = useSelector(state => state.user.value.loggedIn)
-  console.log(authenticated)
-  if (!authenticated) {
-    return <Navigate replace to="/" />;
-    } else {
+  const [email, setEmail] = useState('');
+
+  const saveEmail = () => {
+    let email = localStorage.getItem("email")
+    let emailSplit = email.replace(/[|&;$%@"<>()+,]/g, "");
+    setEmail(emailSplit);
+  }
+  useEffect(() => {
+    saveEmail()
+  }, []);
+
+  if (email !== null ) {
   return (
-    <div>
-      <Navbar className="d-grid gap-5"/>
+    <div >
+      <Navbar 
+      className="d-grid gap-5" email={email} />
             <Table striped bordered hover>
             <thead>
                 <tr>
@@ -45,6 +53,9 @@ const Dashboard = () => {
             </Table>
     </div>
     );
+  }
+  else {
+    return <Navigate replace to="/" />;
   }
 }
 

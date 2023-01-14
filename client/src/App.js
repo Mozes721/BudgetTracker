@@ -2,12 +2,12 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
 import { BrowserRouter, Routes, Route} from "react-router-dom"
 import React, { Component} from "react"
-import Auth from "./components/authentication/Auth"
-import Dashboard from "./components/dashboard/Overview"
+import Auth from "../src/components/authentication/Auth"
+import Dashboard from "./components/dashboard/Dashboard"
 
 
-
-function App() {
+class App extends Component {
+  render() {
     return (
       <BrowserRouter>
         <Routes>
@@ -16,6 +16,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     )
+  }
 }
 
 export default App

@@ -1,9 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../features/userSlice";
+
 import axios from "axios";
-import { useDispatch } from 'react-redux'
-import { hasOnlyExpressionInitializer } from "typescript";
 
 
 export default function Register ({
@@ -11,7 +9,6 @@ export default function Register ({
   setEmail, emailRef, pwd, setPwd, setErrMsg,
   authMode, setAuthMode}) { 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
     useEffect(() => {
       setErrMsg('')
     }, [user, email, pwd])
@@ -27,8 +24,7 @@ export default function Register ({
       "email": email,
       "password": pwd
     });
-    console.log(user)
-    console.log(registerUser);
+  
     var config = {
       method: 'post',
       url: 'http://localhost:5000/api/v1/users/',
@@ -38,16 +34,9 @@ export default function Register ({
       data : registerUser
     };
     axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-
-      dispatch(login({
-        email:email,
-        loggedIn:true,
-      }));
-
-
-      navigate("/dashboard");
+    .then(function () {
+     localStorage.setItem("email", JSON.stringify(email));
+     navigate("/dashboard");
     })
     .catch(function (error) {
       console.log(error);

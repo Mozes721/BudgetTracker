@@ -1,7 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import { useDispatch } from 'react-redux'
+import React, { useRef, useState} from "react";
 import  Register  from "./Register"
 import  Login  from "./Login"
 import Alert from 'react-bootstrap/Alert';

@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import React from 'react';
 
 
-export default function NavBar () {
+export default function NavBar ({email}) {
   return (
     <>
       <Navbar bg="dark" variant="dark">
@@ -17,8 +17,9 @@ export default function NavBar () {
             <Nav.Link href="/shared">Shared</Nav.Link>
           </Nav>
           <Navbar.Text>
-            Signed in as: Mark Otto
+            Signed in as: {email}
           </Navbar.Text>
+          <br></br>
           <a href="/">Sign Out</a>
         </Container>
       </Navbar>

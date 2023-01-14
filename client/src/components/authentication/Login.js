@@ -1,21 +1,20 @@
 
- import React, { useRef, useState, useEffect } from "react";
- import { useNavigate } from "react-router-dom";
- import { login } from "../../features/userSlice";
+ import React, { useEffect, createContext } from "react";
+ import { useNavigate } from 'react-router-dom';
  import axios from "axios";
 
- 
- 
+
  export default function Login ({
   email, setEmail, emailRef,
   pwd, setPwd, setErrMsg,setError,
-  dispatch, navigate,
   authMode, setAuthMode
 }) {
-
+  
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin")
   }
+
+  const navigate = useNavigate();
   useEffect(() => {
     setErrMsg('')
   }, [email, pwd])
@@ -37,14 +36,8 @@ const handleLogin = async (e) => {
         data: loginUser
       };
       axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-
-        dispatch(login({
-          email:email,
-          loggedIn:true,
-        }));
-
+      .then(function () {
+        localStorage.setItem("email", JSON.stringify(email));
         navigate("/dashboard");
       })
       .catch(function (error) {
