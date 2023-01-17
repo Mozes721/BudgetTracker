@@ -2,6 +2,7 @@ const pool = require('../utils/connections');
 const queryFunc = require('../midelware/queryFunctions');
 const queries = require('./queries');
 const bcrypt = require("bcrypt");
+const e = require('express');
 pool.connect();
 
 
@@ -44,11 +45,15 @@ const getUserById = (req, res) => {
 
   const addUser = (req, res) => {
     const { fullname, email, password } = req.body;
-    console.log(fullname, email, password)
     //check if email exists
     pool.query(queries.checkEmailExists, [email], (error, results) => {
-        if (results.rows.length) {
-          res.send("Email already exists.;")
+        if (results.rows.length > 0) {
+          res.status(error || 409).send({
+            error: {
+              status: error || 409,
+              message: error || "Email already exists.",
+            },
+          });
         }else {
     //add user to db
         bcrypt.genSalt(10, (err, salt) => {
@@ -64,7 +69,6 @@ const getUserById = (req, res) => {
 
 const deleteUserById = (req, res) => {
   const id = parseInt(req.params.id);
-  console.log(id);
   pool.query(queries.deleteUser, [id], (error, results) => {
     const noUserFound = !results.rows.length;
     if (noUserFound) {
@@ -74,14 +78,14 @@ const deleteUserById = (req, res) => {
 }
 
 const loginUser = (req, res) => {
-  const { fullname, email, password } = req.body;
+  const { email, password } = req.body;
    pool.query(queries.checkPassword, [email], (error, results) => {
       if (results.rows.length) {
         var user_pw = results.rows[0].password;
         if(bcrypt.compareSync(password, user_pw)) {
-          res.status(201).send(`User Logged in  Succesfully with the email of ${email}`)
+          res.status(200).send(`User Logged in  Succesfully with the email of ${email}`)
         } else {
-          res.status(401).send("Incorrect email or password provided!")
+          res.status(400).send("Incorrect email or password provided!")
         }
       }
   });

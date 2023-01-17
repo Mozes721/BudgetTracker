@@ -4,7 +4,8 @@
   "description": "",
   "main": "api.js",
   "scripts": { 
-    "start": "nodemon api.js --unhandled-rejections=strict"
+    "start": "nodemon api.js --unhandled-rejections=strict",
+    "debug": "node --inspect api.js"
   },
   "keywords": [],
   "author": "",
