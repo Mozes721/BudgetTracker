@@ -16,5 +16,5 @@ export const LogoutButton = () => {
       return  navigate("/");
     }
   
-    return <Button onClick={logout} variant="outline-warning">Logout</Button> 
+    return <Button className="mx-5" onClick={logout} variant="outline-warning">Logout</Button>
   };

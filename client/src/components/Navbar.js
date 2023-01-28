@@ -21,7 +21,7 @@ export default function NavBar ({email}) {
             Signed in as: {email}
           </Navbar.Text>
         </Container>
-        <LogoutButton />
+        <LogoutButton className=""/>
       </Navbar>
     </>
   );
