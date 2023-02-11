@@ -20,7 +20,7 @@ app.get('/', (req, res, next) => {
   res.send('Home screen')
 })
 
-app.use('/api/v1/users', userRoutes);
+app.use('/api/v1', userRoutes);
 
 
 app.listen(port, () => {

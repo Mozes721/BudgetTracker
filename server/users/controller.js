@@ -2,7 +2,6 @@ const pool = require('../utils/connections');
 const queryFunc = require('../midelware/queryFunctions');
 const queries = require('./queries');
 const bcrypt = require("bcrypt");
-const e = require('express');
 pool.connect();
 
 
@@ -42,6 +41,32 @@ const getUserById = (req, res) => {
     }
     pool.end;
   }
+
+
+const getIdByEmail = (req, res) => {
+    try {
+        const email = req.body.email;
+        pool.query(queries.getUsers, (error, result) => {
+          if(!error) {
+              for (const user of result.rows) {
+                  if(user.email === email) {
+
+                      res.status(200).json(user.user_id);
+                      return;
+                  }
+              }
+          }
+      });
+    } catch (error) {
+        res.status(error.status || 500).send({
+            error: {
+                status: error.status || 500,
+                message: error.message || "Internal Server Error",
+            },
+        });
+    }
+    pool.end;
+}
 
   const addUser = (req, res) => {
     const { fullname, email, password } = req.body;
@@ -89,6 +114,25 @@ const loginUser = (req, res) => {
         }
       }
   });
+}
+
+const getAllExpensesAndIncomes = (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        pool.query(queries.getAllExpensesAndIncomes, [id], (error, result) => {
+            if(!error) {
+                res.status(200).json(result.rows);
+            }
+        })
+    } catch (error) {
+        res.status(error.status || 500).send({
+            error: {
+                status: error.status || 500,
+                message: error.message || "Internal Server Error",
+            },
+        });
+    }
+    pool.end;
 }
 
 const addExpenseOrIncome =  (req, res) => {
@@ -143,9 +187,11 @@ const shareBudget = (req, res) => {
 module.exports = {
     getUsers,
     getUserById,
+    getIdByEmail,
     addUser,
     deleteUserById,
     loginUser,
+    getAllExpensesAndIncomes,
     addExpenseOrIncome,
     shareBudget
 };
