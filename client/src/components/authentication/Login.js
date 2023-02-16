@@ -1,8 +1,9 @@
 
- import React, { useEffect, useState, createContext } from "react";
- import { useNavigate } from 'react-router-dom';
- import axios from "axios";
+import React, { useEffect, useState, createContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 import  ErrorDanger  from "../../hooks/errorBoundary"; 
+import { emailStore } from "../../store/store";
 
 
  export default function Login ({
@@ -29,7 +30,7 @@ const handleLogin = async (e) => {
     });
       const config = {
         method: 'post',
-        url: 'http://localhost:5000/api/v1/users/login',
+        url: 'http://localhost:5000/api/v1/login',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -37,7 +38,7 @@ const handleLogin = async (e) => {
       };
       axios(config)
       .then(function () {
-        localStorage.setItem("email", JSON.stringify(email));
+        emailStore.setState({ email: email})
         navigate("/dashboard");
       })
       .catch(function (error) {

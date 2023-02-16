@@ -1,7 +1,9 @@
 import React, { useEffect, useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import  ErrorDanger  from "../../hooks/errorBoundary";
+import { emailStore } from "../../store/store";
 import axios from "axios";
+
 
 
 export default function Register ({
@@ -28,7 +30,7 @@ export default function Register ({
   
     var config = {
       method: 'post',
-      url: 'http://localhost:5000/api/v1/users/',
+      url: 'http://localhost:5000/api/v1',
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -36,7 +38,7 @@ export default function Register ({
     };
     axios(config)
     .then(function () {
-     localStorage.setItem("email", JSON.stringify(email));
+     emailStore.setState({ email: email})
      navigate("/dashboard");
     })
     .catch(function (error) {

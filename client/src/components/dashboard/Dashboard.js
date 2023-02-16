@@ -1,28 +1,24 @@
 import Navbar from '../Navbar';
 import Table from 'react-bootstrap/Table';
 import { BrowserRouter, Navigate } from "react-router-dom"
-import React, { useRef } from "react"
+import React from "react"
 import { useEffect, useState } from "react";
-import { useSelector } from 'react-redux'
+import { useStore, create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { emailStore } from "../../store/store";
+import UserBalance from '../../hooks/userBalance';
 import Balance from '../Balance'
 
 const Dashboard = () => {
-  const [email, setEmail] = useState('');
-
-  const saveEmail = () => {
-    let email = localStorage.getItem("email")
-    let emailSplit = email.replace(/[|&;$%@"<>()+,]/g, "");
-    setEmail(emailSplit);
-  }
-  useEffect(() => {
-    saveEmail()
-  }, []);
-
+  const { email } = emailStore.getState();
+  // const { email, setEmail } = useStore(emailStore);
+  const userTransactions = UserBalance(email);
+  console.log(userTransactions);
   if (email !== null ) {
   return (
     <div className="row d-flex justify-content-center">
       <Navbar 
-      className="d-grid gap-5 me-5" email={email} />
+      className="d-grid gap-5 me-5" />
 
             <Balance email={email} />
 
