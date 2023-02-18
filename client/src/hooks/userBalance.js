@@ -7,47 +7,31 @@ export default function UserBalance({ email }) {
   const [userId, setUserId] = useState(idStore.getState());
 
   useEffect(() => {
-    async function fetchData() {
-      if (!userId) {
-        try {
-          const config = {
-            method: 'get',
-            url: 'http://localhost:5000/api/v1/email',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            data: JSON.stringify({email})
-          };
-          const response = await axios.get(config);
-          const userId = response.data;
-          setUserId(userId);
-          console.log("Hello")
-          console.log(userId)
-          idStore.setState({ id: userId});
-          const transactionResponse = await axios.get(`http://localhost:5000/api/v1/expense/${userId}`);
-          setUserTransactions(transactionResponse.data);
-        } catch (error) {
-          console.error(error);
-        }
+    const fetchData = async () => {
+      try {
+        const emailUser = JSON.stringify({
+          "email": email
+        });
+        const config = {
+          method: 'post',
+          url: 'http://localhost:5000/api/v1/email',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: emailUser
+        };
+        const response = await axios(config);
+        setUserId(response.data);
+        idStore.setState({id: response.data});
+        const transactionsResponse = await axios(`http://localhost:5000/api/v1/expense/${userId}`);
+        setUserTransactions(transactionsResponse.data);
+      } catch (error) {
+        console.error(error);
       }
-    }
+    };
     fetchData();
-  }, [userId, email]);
+  }, [email, userId]);
 
-  useEffect(() => {
-    async function fetchData() {
-      if (userId) {
-        try {
-          idStore.setState({ id: userId });
-          const response = await axios.get(`http://localhost:5000/api/v1/expense/${userId}`);
-          setUserTransactions(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
-    fetchData();
-  }, [userId]);
 
   return userTransactions;
 }

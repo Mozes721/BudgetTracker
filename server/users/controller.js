@@ -50,7 +50,6 @@ const getIdByEmail = (req, res) => {
           if(!error) {
               for (const user of result.rows) {
                   if(user.email === email) {
-
                       res.status(200).json(user.user_id);
                       return;
                   }
