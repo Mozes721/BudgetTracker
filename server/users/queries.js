@@ -9,6 +9,7 @@ const checkPassword = "SELECT password FROM users WHERE email = $1";
 
 const addUser = "INSERT INTO users (fullname, email, password) VALUES ($1, $2, $3)";
 const deleteUser = "DELETE FROM users WHERE user_id = $1";
+const addNullBalance = "INSERT INTO budget(balance, title, expense, value, user_id) VALUES (0, '', false, 0, $1)";
 const addExpenseOrIncome= "INSERT INTO budget(balance, title, expense, value, user_id) VALUES ($1, $2, $3, $4, $5)";
 
 const getBalance = "SELECT DISTINCT balance FROM budget WHERE user_id = $1";
@@ -26,6 +27,7 @@ module.exports = {
     addUser,
     checkPassword,
     deleteUser,
+    addNullBalance,
     addExpenseOrIncome,
     updateBalance,
     shareBudget,
