@@ -18,6 +18,7 @@ app.get('/', (req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true);
   // next();
   res.send('Home screen')
+  
 })
 
 app.use('/api/v1', userRoutes);

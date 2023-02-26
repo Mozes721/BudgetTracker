@@ -1,11 +1,14 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { LogoutButton } from '../hooks/useLogOut';
+import { useStore } from 'zustand';
+import { emailStore } from "../store/store";
 import Navbar from 'react-bootstrap/Navbar';
 import React from 'react';
 
 
-export default function NavBar ({email}) {
+export default function NavBar () {
+  const { email, setEmail } = useStore(emailStore);
   return (
     <>
       <Navbar bg="dark" variant="dark">

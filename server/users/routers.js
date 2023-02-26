@@ -5,7 +5,7 @@ const router = Router();
 router.get('/',controller.getUsers);
 router.post('/', controller.addUser);
 router.get('/id/:id',controller.getUserById);
-router.get('/email',controller.getIdByEmail);
+router.post('/email',controller.getIdByEmail);
 router.delete('/:id',controller.deleteUserById);
 router.post('/login', controller.loginUser);
 

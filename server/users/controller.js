@@ -50,7 +50,6 @@ const getIdByEmail = (req, res) => {
           if(!error) {
               for (const user of result.rows) {
                   if(user.email === email) {
-
                       res.status(200).json(user.user_id);
                       return;
                   }
@@ -84,6 +83,15 @@ const getIdByEmail = (req, res) => {
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(password, salt, (err, hash) => {
             pool.query(queries.addUser, [fullname, email, hash], (error, results) => {
+              pool.query(queries.getUsers, (error, result) => {
+                if(!error) {
+                    for (const user of result.rows) {
+                        if(user.email === email) {
+                          pool.query(queries.addNullBalance, [user.user_id])
+                        }
+                    }
+                }
+            });
               if (error) throw error;
               res.status(201).send("User Added Succesfully!")
             })
