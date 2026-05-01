@@ -1,0 +1,33 @@
+CLAUDE.md
+.idea/*
+.vscode/*
+
+# Env files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# Secrets
+.mcp.json
+
+# Next.js
+.next/
+out/
+
+# Dependencies
+node_modules/
+
+# Prisma generated migrations (track manually)
+# prisma/migrations/   ← uncomment if you want to ignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+.claude

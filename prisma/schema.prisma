@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  fullname  String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  budgets       Budget[]
+  sharedBudgets BudgetShare[]
+}
+
+model Budget {
+  id        Int      @id @default(autoincrement())
+  title     String
+  ownerId   Int
+  createdAt DateTime @default(now())
+
+  owner   User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  entries BudgetEntry[]
+  shares  BudgetShare[]
+}
+
+model BudgetEntry {
+  id         Int      @id @default(autoincrement())
+  budgetId   Int
+  categoryId Int
+  title      String
+  value      Float
+  isExpense  Boolean  @default(true)
+  date       DateTime @default(now())
+
+  budget   Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  entries BudgetEntry[]
+}
+
+model BudgetShare {
+  id       Int @id @default(autoincrement())
+  budgetId Int
+  userId   Int
+
+  budget Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([budgetId, userId])
+}
